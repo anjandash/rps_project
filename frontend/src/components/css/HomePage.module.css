@@ -1,0 +1,18 @@
+.wrapper{
+    padding: 20;
+    background-color: pink;
+    align-items: center;
+}
+
+.joinButton{
+    background-color: red;
+    text-decoration: none;
+    text-align: center;
+
+}
+
+.createButton{
+    background-color: gray;
+    text-decoration: none;
+    text-align: center;
+}
