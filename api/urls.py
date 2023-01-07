@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import GameView, CreateGameView, GetGame, JoinGame, UserInGame, LeaveGame, PlayGame
+from .views import GameView, CreateGameView, GetGame, JoinGame, UserInGame, LeaveGame, PlayGame, ReplayGame
 
 urlpatterns = [
     path('game', GameView.as_view()),
@@ -9,4 +9,5 @@ urlpatterns = [
     path('user-in-game', UserInGame.as_view()),
     path('leave-game', LeaveGame.as_view()),
     path('play-game', PlayGame.as_view()),
+    path('replay-game', ReplayGame.as_view()),
 ]

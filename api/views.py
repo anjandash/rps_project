@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-from .serializers import GameSerializer, JoinGameSerializer, CreateGameSerializer, PlayGameSerializer
+from .serializers import GameSerializer, JoinGameSerializer, CreateGameSerializer, PlayGameSerializer, ReplayGameSerializer
 from .models import Game
 
 from rest_framework import generics, status
@@ -126,3 +126,25 @@ class PlayGame(APIView):
 
                 return Response(PlayGameSerializer(game).data, status=status.HTTP_200_OK)            
         return Response({'Bad Request': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+class ReplayGame(APIView):
+    serializer_class = ReplayGameSerializer
+
+    def patch(self, request, format=None):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():          
+            code = self.request.session.get('game_code')
+
+            queryset = Game.objects.filter(code=code)
+            if not queryset.exists(): 
+                return Response({'Bad Request': 'Invalid Game Code'}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                game = queryset[0]
+                game.host_choice = serializer.data.get('host_choice')
+                game.host_play_again = serializer.data.get('host_play_again')
+                game.guest_choice = serializer.data.get('guest_choice')
+                game.guest_play_again = serializer.data.get('guest_play_again')
+                game.save(update_fields=['host_choice', 'guest_choice'])
+
+                return Response(PlayGameSerializer(game).data, status=status.HTTP_200_OK)            
+        return Response({'Bad Request': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)        

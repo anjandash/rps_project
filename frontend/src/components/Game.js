@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import styles from "./css/Game.module.css"
+import socketIOClient from "socket.io-client";
 
 export default class Game extends Component {
     constructor(props){
@@ -9,21 +10,43 @@ export default class Game extends Component {
             isHost: false,
             hostChoice: null,
             guestChoice: null,
+            
             hostplayAgain: false,
             guestPlayAgain: false,
+
+            verdict: false,
+            messageForHost: null,
+            messageForGuest: null,
         };
-        this.gameCode = this.props.match.params.gameCode
-        this.getGameDetails()
-        this.getScores()
-        this.handleLeaveRoomButtonPressed = this.handleLeaveRoomButtonPressed.bind(this)
-        // this.handlePlayAgainButtonPressed = this.handlePlayAgainButtonPressed.bind(this)
-        this.handleUserChoice = this.handleUserChoice.bind(this)
+        this.gameCode = this.props.match.params.gameCode;
+        this.getGameDetails();
+        this.handleLeaveRoomButtonPressed = this.handleLeaveRoomButtonPressed.bind(this);
+        this.handlePlayAgainButtonPressed = this.handlePlayAgainButtonPressed.bind(this);
+        this.handleUserChoice = this.handleUserChoice.bind(this);
     }
 
     componentDidMount() {
         this.intervalId = setInterval(() => {
           this.getScores();
         }, 1000);
+
+        // // Connect to web socket endpoint
+        // const socket = socketIOClient("http://127.0.0.1:8000/");
+        // socket.on("connect", () => {
+        //     console.log("Connected to web socket");
+        // });
+
+        // // Listen for messages on the web socket connection
+        // socket.on("host_replay_update", (data) => {
+        // // Update component state when message is received
+        //     this.setState({ hostplayAgain: data.host_play_again });
+        // });     
+        
+        // // Listen for messages on the web socket connection
+        // socket.on("guest_replay_update", (data) => {
+        //     // Update component state when message is received
+        //     this.setState({ guestplayAgain: data.guest_play_again });
+        // });          
     }
     
     componentWillUnmount() {
@@ -58,15 +81,45 @@ export default class Game extends Component {
         })
         .then((data) => {
             if (data.host_choice != null && data.guest_choice != null){
+
+                /* rps logic */
+                const host_dec = data.host_choice;
+                const guest_dec = data.guest_choice;
+
+                const message_loss = "Sorry, you lost!"
+                const message_win  = "Yeahhh! You won!"
+                const message_draw = "Oh, It's a draw!"
+
+                let message_for_host;
+                let message_for_guest;
+
+                if (host_dec == guest_dec){
+                    message_for_host = message_draw;
+                    message_for_guest = message_draw;
+                } else if ((host_dec == "rock" && guest_dec == "paper")) {
+                    message_for_host = message_loss;
+                    message_for_guest = message_win;                       
+                } else if ((host_dec == "paper" && guest_dec == "scissors")) {
+                    message_for_host = message_loss;
+                    message_for_guest = message_win;    
+                } else if ((host_dec == "scissors" && guest_dec == "rock")) {
+                    message_for_host = message_loss;
+                    message_for_guest = message_win;    
+                } else {
+                    message_for_host = message_win;
+                    message_for_guest = message_loss;                            
+                }                  
+
                 this.setState({
                     hostChoice: data.host_choice,
-                    guestChoice: data.guest_choice,             
-                })     
-                console.log("clear interval")
-                clearInterval(this.intervalId);
+                    guestChoice: data.guest_choice,
+                    messageForHost: message_for_host,
+                    messageForGuest: message_for_guest,
+                    verdict: true,
+                });   
             }
         });
-      }    
+      }        
 
     handleLeaveRoomButtonPressed() {
         const requestOptions = {
@@ -79,13 +132,37 @@ export default class Game extends Component {
         });
     }
 
-    // handlePlayAgainButtonPressed() {
-    //     this.setState({
-    //         hostChoice: null,
-    //         guestChoice: null,
-    //     })
-    //     this.forceUpdate();
-    // }
+    handlePlayAgainButtonPressed() {
+        const requestOptions = {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                host_choice: null,
+                guest_choice: null,
+                host_play_again: this.state.hostplayAgain,
+                guest_play_again: this.state.guestPlayAgain,
+            }),
+        };
+        fetch("/api/replay-game", requestOptions)
+        .then((response) => {
+            if (response.ok){
+                console.log("replay update done.")
+                return response.json()
+            } else {
+                console.log("replay update not done.")
+            }
+        })
+        .then((data) => {
+            console.log(data);
+            this.setState({
+                hostChoice: null,
+                guestChoice: null,
+                verdict: false,
+                messageForHost: null,
+                messageForGuest: null,
+            });            
+        });
+    }
 
     handleUserChoice(value) {
         console.log("handleUserChoice Pressed with value: " + value)
@@ -99,8 +176,6 @@ export default class Game extends Component {
                 guestChoice: value,
             }, () => {this.fetchData({guest_choice: this.state.guestChoice});});            
         }
-        // this.getGameDetails()
-
     }
 
     fetchData(json_data) {
@@ -143,6 +218,18 @@ export default class Game extends Component {
         );
     }    
 
+    renderHostVerdict(){
+        return(
+            <div>{this.state.messageForHost}</div>
+        );
+    }
+
+    renderGuestVerdict(){
+        return(
+            <div>{this.state.messageForGuest}</div>
+        );
+    }    
+
     render() {
         return (
             <div className={styles.gameWrapper}>
@@ -162,7 +249,10 @@ export default class Game extends Component {
                     <div className={styles.hostChoice}>{this.state.hostChoice}</div>
                     <div className={styles.divider}>vs</div>
                     <div className={styles.guestChoice}>{this.state.guestChoice}</div>
-                </div>                
+                </div>   
+
+                {   (this.state.verdict == true && this.state.isHost == true) ? this.renderHostVerdict() : <br/>  }
+                {   (this.state.verdict == true && this.state.isHost == false) ? this.renderGuestVerdict() : <br/>  }
 
                 {   this.state.isHost == true ?
                     (this.state.hostChoice == null ? this.renderChoices() : this.renderChoicesDisabled()) : null
@@ -171,7 +261,7 @@ export default class Game extends Component {
                     (this.state.guestChoice == null ? this.renderChoices() : this.renderChoicesDisabled()) : null
                 }              
 
-                {/* <div className={`${styles.button} ${styles.leaveButton}`} onClick={this.handlePlayAgainButtonPressed}>PLAY AGAIN</div> */}
+                <div className={`${styles.button} ${styles.leaveButton}`} onClick={this.handlePlayAgainButtonPressed}>PLAY AGAIN</div>
                 <div className={`${styles.button} ${styles.leaveButton}`} onClick={this.handleLeaveRoomButtonPressed}>LEAVE GAME</div>
             </div>
         );
