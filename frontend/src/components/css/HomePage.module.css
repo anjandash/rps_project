@@ -1,18 +1,46 @@
 .wrapper{
     padding: 20;
     background-color: pink;
-    align-items: center;
+    text-align: center;
 }
 
+.button{
+    border-radius: 7px;
+    -webkit-border-radius: 7px;
+	-moz-border-radius: 7px;
+	-o-border-radius: 7px;
+
+	margin:5px;
+    padding: 10px 10px 10px 10px;
+
+    text-align: center;
+	display: inline-block;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.button:active {
+	box-shadow: none;
+	position: relative;
+	top: .2em;
+}
+
+
+
+/* find gaming goldyellow or gray shades for this */
 .joinButton{
-    background-color: red;
-    text-decoration: none;
-    text-align: center;
-
+    background-color: lightgray;
+    color: gray;
+    text-shadow: -1px -1px black, 1px 1px white;
+    box-shadow: 0 .2em gray; 
 }
 
+
+/* find gaming green shades for this */
 .createButton{
-    background-color: gray;
-    text-decoration: none;
-    text-align: center;
+    background-color: lightgray;
+    color: gray;
+    text-shadow: -1px -1px black, 1px 1px white;
+    box-shadow: 0 .2em gray; 
 }

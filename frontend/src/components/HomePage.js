@@ -30,9 +30,9 @@ export default class HomePage extends Component {
     renderHomePage() {
         return (
             <div className={styles.wrapper}>
-                <h4>Rock Paper Scissors</h4>
-                <Link to="/create" className={styles.createButton}>CREATE NEW GAME</Link>
-                <Link to="/join" className={styles.joinButton}>JOIN GAME</Link>
+                <Link to="/create" className={`${styles.button} ${styles.createButton}`}>CREATE NEW GAME</Link>
+                <br/><br/>
+                <Link to="/join" className={`${styles.button} ${styles.joinButton}`}>JOIN GAME</Link>
             </div>
         );
     }

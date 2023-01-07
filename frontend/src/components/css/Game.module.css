@@ -1,13 +1,133 @@
-* {
-  margin: 0;
-  padding: 0;  
+.gameWrapper{
+  padding: 20;
+  background-color: red;
+  text-align: center;
 }
 
-.buttonRed{
-    background-color: red;
+.button{
+  border-radius: 7px;
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  -o-border-radius: 7px;
+
+  margin:5px;
+  padding: 10px 10px 10px 10px;
+
+  text-align: center;
+  display: inline-block;
+  font-weight: bold;
+  text-decoration: none;
+  cursor: pointer;
 }
 
-.buttonGray{
-    background-color: gray;
+.button:active {
+  box-shadow: none;
+  position: relative;
+  top: .2em;
 }
 
+.leaveButton{
+  background-color: lightgray;
+  color: gray;
+  text-shadow: -1px -1px black, 1px 1px white;
+  box-shadow: 0 .2em gray; 
+}
+
+.scoreBoard{
+  width: 200px;
+  height: 40px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 2px solid black;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.hostScore{
+  height: 40px;
+  width: 40px;
+  background-color: gray;
+}
+
+.guestScore{
+  height: 40px;
+  width: 40px;
+  background-color: gray;
+}
+
+.scoreDivider{
+  height: 40px;
+  width: 10px;
+  background-color: blue;
+}
+
+.matchBlock{
+  border-radius: 7px;
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  -o-border-radius: 7px;
+
+  width: 500px;
+  margin: 20px auto;
+  padding: 20px;
+
+  background-color: green;
+
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.hostChoice{
+  height: 100px;
+  width: 100px;
+  background-color: gray;
+}
+
+.guestChoice{
+  height: 100px;
+  width: 100px;
+  background-color: gray;
+}
+
+.divider{
+  height: 100px;
+  width: 10px;
+  background-color: red;
+}
+
+.choiceBlock{
+  border-radius: 7px;
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  -o-border-radius: 7px;
+
+  width: 350px;
+  margin: 20px auto;
+  padding: 20px;
+
+  background-color: green;
+
+  display: flex;
+  justify-content: space-between;
+}
+
+.rock{
+  height: 100px;
+  width: 100px;
+  background-color: gray;
+
+}
+
+.paper{
+  height: 100px;
+  width: 100px;
+  background-color: white;
+  
+}
+
+.scissors{
+  height: 100px;
+  width: 100px;
+  background-color: yellow;
+  
+}

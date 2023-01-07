@@ -13,7 +13,9 @@ export default class CreateGamePage extends Component {
         const requestOptions = {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({}),
+            body: JSON.stringify({
+                
+            }),
         };
         fetch('/api/create-game', requestOptions)
             .then((response) => response.json())
@@ -22,12 +24,13 @@ export default class CreateGamePage extends Component {
 
     render() {
         return (
-            <div>
-                <div className={styles.buttonRed} onClick={this.handleCreateGameButtonPressed}>
-                    <p>Create a game</p>
+            <div className={styles.wrapper}>
+                <div className={`${styles.button} ${styles.createButton}`} onClick={this.handleCreateGameButtonPressed}>
+                    CREATE NEW GAME
                 </div>
+                <br/><br/>
                 <div>
-                    <Link to="/" className={styles.buttonGray}>Back</Link>
+                    <Link to="/" className={`${styles.button} ${styles.backButton}`}>BACK</Link>
                 </div>                
             </div>
         );

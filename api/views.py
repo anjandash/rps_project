@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-from .serializers import GameSerializer, CreateGameSerializer
+from .serializers import GameSerializer, JoinGameSerializer, CreateGameSerializer, PlayGameSerializer
 from .models import Game
 
 from rest_framework import generics, status
@@ -15,6 +15,7 @@ def main(request):
 class GameView(generics.ListAPIView): 
     queryset = Game.objects.all() 
     serializer_class = GameSerializer
+
 
 class GetGame(APIView):
     serializer_class = GameSerializer
@@ -33,7 +34,7 @@ class GetGame(APIView):
 
 
 class JoinGame(APIView):
-    serializer_class = GameSerializer
+    serializer_class = JoinGameSerializer
     lookup_url_kwarg = 'code'
 
     def post(self, request, format=None):
@@ -43,10 +44,17 @@ class JoinGame(APIView):
         code = request.data.get(self.lookup_url_kwarg)
         if code != None:
             queryset = Game.objects.filter(code=code)
-            if len(queryset) > 0: # not queryset.exists()
+            if queryset.exists():
+                game = queryset[0]
+                if game.guest is None:
+                    game.guest = self.request.session.session_key
+                    game.save(update_fields=['guest'])
+                else:
+                    return Response({'message': 'Sorry! Another player joined the game!'}, status=status.HTTP_400_BAD_REQUEST)
+
                 self.request.session['game_code'] = code
                 return Response({'message': 'Game Joined!'}, status=status.HTTP_200_OK)
-            return Response({'Bad Request': 'Invalid Game Code'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'Bad Request': 'Invalid Game Code!'}, status=status.HTTP_400_BAD_REQUEST)
         return Response({'Bad Request': 'Invalid request data, did not find a game code.'}, status=status.HTTP_400_BAD_REQUEST)               
 
 
@@ -83,6 +91,7 @@ class UserInGame(APIView):
         data = {'code': self.request.session.get('game_code')}
         return JsonResponse(data, status=status.HTTP_200_OK)
 
+
 class LeaveGame(APIView):
     def post(self, request, format=None):
         if 'game_code' in self.request.session:
@@ -95,3 +104,25 @@ class LeaveGame(APIView):
                 game.delete()
         return Response({'Message': 'Success'}, status=status.HTTP_200_OK)        
     
+
+class PlayGame(APIView):
+    serializer_class = PlayGameSerializer
+
+    def patch(self, request, format=None):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():          
+            code = self.request.session.get('game_code')
+
+            queryset = Game.objects.filter(code=code)
+            if not queryset.exists(): 
+                return Response({'Bad Request': 'Invalid Game Code'}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                game = queryset[0]
+                if serializer.data.get('host_choice') is not None:
+                    game.host_choice = serializer.data.get('host_choice')
+                if serializer.data.get('guest_choice') is not None:
+                    game.guest_choice = serializer.data.get('guest_choice')
+                game.save(update_fields=['host_choice', 'guest_choice'])
+
+                return Response(PlayGameSerializer(game).data, status=status.HTTP_200_OK)            
+        return Response({'Bad Request': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
