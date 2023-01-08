@@ -31,10 +31,14 @@ export default class JoinGamePage extends Component {
         fetch("/api/join-game", requestOptions)
         .then((response) => {
             if (response.ok) {
-            this.props.history.push(`/game/${this.state.gameCode}`);
+                this.props.history.push(`/game/${this.state.gameCode}`);
             } else {
-            this.setState({ error: "Game not found." });
+                this.setState({ error: "Game not found." });
             }
+            return response.json();
+        })
+        .then((data) => {
+            console.log(data)
         })
         .catch((error) => {
             console.log(error);
