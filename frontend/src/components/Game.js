@@ -17,36 +17,20 @@ export default class Game extends Component {
             verdict: false,
             messageForHost: null,
             messageForGuest: null,
+            playDecision: false,
         };
         this.gameCode = this.props.match.params.gameCode;
         this.getGameDetails();
-        this.handleLeaveRoomButtonPressed = this.handleLeaveRoomButtonPressed.bind(this);
+        this.handleLeaveGameButtonPressed = this.handleLeaveGameButtonPressed.bind(this);
         this.handlePlayAgainButtonPressed = this.handlePlayAgainButtonPressed.bind(this);
         this.handleUserChoice = this.handleUserChoice.bind(this);
+        this.handleContinueGamePressed = this.handleContinueGamePressed.bind(this);
     }
 
     componentDidMount() {
         this.intervalId = setInterval(() => {
           this.getScores();
-        }, 1000);
-
-        // // Connect to web socket endpoint
-        // const socket = socketIOClient("http://127.0.0.1:8000/");
-        // socket.on("connect", () => {
-        //     console.log("Connected to web socket");
-        // });
-
-        // // Listen for messages on the web socket connection
-        // socket.on("host_replay_update", (data) => {
-        // // Update component state when message is received
-        //     this.setState({ hostplayAgain: data.host_play_again });
-        // });     
-        
-        // // Listen for messages on the web socket connection
-        // socket.on("guest_replay_update", (data) => {
-        //     // Update component state when message is received
-        //     this.setState({ guestplayAgain: data.guest_play_again });
-        // });          
+        }, 1000); 
     }
     
     componentWillUnmount() {
@@ -118,10 +102,29 @@ export default class Game extends Component {
                     verdict: true,
                 });   
             }
+
+            if (data.host_play_again == true || data.guest_play_again == true){
+                if (data.host_play_again == true && data.guest_play_again == false){
+                    if (this.state.isHost == false){
+                        console.log("Hey Guest! Play again?")
+                        this.setState({
+                            playDecision: true,
+                        });
+                        
+                    }
+                } else if (data.host_play_again == false && data.guest_play_again == true) {
+                    if (this.state.isHost == true){
+                        console.log("Hey Host! Play again?")
+                        this.setState({
+                            playDecision: true,
+                        })
+                    }                    
+                }
+            }
         });
       }        
 
-    handleLeaveRoomButtonPressed() {
+    handleLeaveGameButtonPressed() {
         const requestOptions = {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -133,36 +136,49 @@ export default class Game extends Component {
     }
 
     handlePlayAgainButtonPressed() {
-        const requestOptions = {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
+        let json_data;
+        if (this.state.isHost == true){
+            json_data = {
+                host_choice: null,
+                guest_choice: null,
+                host_play_again: true,
+                guest_play_again: this.state.guestPlayAgain,
+            };   
+        } else {
+            json_data = {
                 host_choice: null,
                 guest_choice: null,
                 host_play_again: this.state.hostplayAgain,
-                guest_play_again: this.state.guestPlayAgain,
-            }),
+                guest_play_again: true,
+            };   
+        }
+
+        console.log(json_data)
+        const requestOptions = {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(json_data),
         };
         fetch("/api/replay-game", requestOptions)
         .then((response) => {
-            if (response.ok){
-                console.log("replay update done.")
-                return response.json()
+            if (response.ok) {
+            console.log("replay update done.");
+            return response.json();
             } else {
-                console.log("replay update not done.")
+            console.log("replay update not done.");
             }
         })
         .then((data) => {
             console.log(data);
             this.setState({
-                hostChoice: null,
-                guestChoice: null,
-                verdict: false,
-                messageForHost: null,
-                messageForGuest: null,
-            });            
+            hostChoice: null,
+            guestChoice: null,
+            verdict: false,
+            messageForHost: null,
+            messageForGuest: null,
+            });
         });
-    }
+      }
 
     handleUserChoice(value) {
         console.log("handleUserChoice Pressed with value: " + value)
@@ -230,7 +246,65 @@ export default class Game extends Component {
         );
     }    
 
+    handleContinueGamePressed(){
+        let json_data;
+        if (this.state.isHost == true){
+            json_data = {
+                host_choice: null,
+                guest_choice: null,
+                host_play_again: false,
+                guest_play_again: false,
+            };   
+        } else {
+            json_data = {
+                host_choice: null,
+                guest_choice: null,
+                host_play_again: false,
+                guest_play_again: false,  
+            };   
+        }
+
+        console.log(json_data)
+        const requestOptions = {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(json_data),
+        };
+        fetch("/api/replay-game", requestOptions)
+        .then((response) => {
+            if (response.ok) {
+            console.log("replay update done.");
+            return response.json();
+            } else {
+            console.log("replay update not done.");
+            }
+        })
+        .then((data) => {
+            console.log(data);
+            this.setState({
+            hostChoice: null,
+            guestChoice: null,
+            verdict: false,
+            messageForHost: null,
+            messageForGuest: null,
+            playDecision: false,
+            hostplayAgain: false,
+            guestPlayAgain: false,
+            });
+        });
+    }
+
     render() {
+        if (this.state.playDecision == true){
+            return (
+                <div>
+                    Your friend wants to play once more! Continue?
+                    <div className={`${styles.button} ${styles.leaveButton}`} onClick={this.handleContinueGamePressed}>YES, CONTINUE</div>
+                    <br/><br/>
+                    <div className={`${styles.button} ${styles.leaveButton}`} onClick={this.handleLeaveGameButtonPressed}>NO, LEAVE GAME</div>                    
+                </div>
+            );
+        }
         return (
             <div className={styles.gameWrapper}>
                 <h3>{this.gameCode}</h3>
@@ -262,7 +336,7 @@ export default class Game extends Component {
                 }              
 
                 <div className={`${styles.button} ${styles.leaveButton}`} onClick={this.handlePlayAgainButtonPressed}>PLAY AGAIN</div>
-                <div className={`${styles.button} ${styles.leaveButton}`} onClick={this.handleLeaveRoomButtonPressed}>LEAVE GAME</div>
+                <div className={`${styles.button} ${styles.leaveButton}`} onClick={this.handleLeaveGameButtonPressed}>LEAVE GAME</div>
             </div>
         );
     }
