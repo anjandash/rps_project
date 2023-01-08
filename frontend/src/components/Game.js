@@ -217,9 +217,9 @@ export default class Game extends Component {
     renderChoices(){
         return(
             <div className={styles.choiceBlock}> 
-                <div className={styles.rock} onClick={this.handleUserChoice.bind(this, "rock")}>ROCK</div>
-                <div className={styles.paper} onClick={this.handleUserChoice.bind(this, "paper")}>PAPER</div>
-                <div className={styles.scissors} onClick={this.handleUserChoice.bind(this, "scissors")}>SCISSORS</div>
+                <div className={styles.rock} onClick={this.handleUserChoice.bind(this, "rock")}><div className={styles.rockChild}></div></div>
+                <div className={styles.paper} onClick={this.handleUserChoice.bind(this, "paper")}><div className={styles.paperChild}></div></div>
+                <div className={styles.scissors} onClick={this.handleUserChoice.bind(this, "scissors")}><div className={styles.scissorsChild}></div></div>
             </div>
         );
     }
@@ -227,22 +227,22 @@ export default class Game extends Component {
     renderChoicesDisabled(){
         return(
             <div className={styles.choiceBlock}> 
-                <div className={styles.rock} style={{opacity: 0.5}} disabled>ROCK</div>
-                <div className={styles.paper} style={{opacity: 0.5}} disabled>PAPER</div>
-                <div className={styles.scissors} style={{opacity: 0.5}} disabled>SCISSORS</div>
+                <div className={styles.rock} style={{opacity: 0.5}} disabled><div className={styles.rockChild}></div></div>
+                <div className={styles.paper} style={{opacity: 0.5}} disabled><div className={styles.paperChild}></div></div>
+                <div className={styles.scissors} style={{opacity: 0.5}} disabled><div className={styles.scissorsChild}></div></div>
             </div>
         );
     }    
 
     renderHostVerdict(){
         return(
-            <div>{this.state.messageForHost}</div>
+            <div className={styles.verdictText}>{this.state.messageForHost}</div>
         );
     }
 
     renderGuestVerdict(){
         return(
-            <div>{this.state.messageForGuest}</div>
+            <div className={styles.verdictText}>{this.state.messageForGuest}</div>
         );
     }    
 
@@ -297,8 +297,9 @@ export default class Game extends Component {
     render() {
         if (this.state.playDecision == true){
             return (
-                <div>
-                    Your friend wants to play once more! Continue?
+                <div className={styles.continueText}>
+                    Your friend wants to play once more!
+                    <br/><br/>
                     <div className={`${styles.button} ${styles.leaveButton}`} onClick={this.handleContinueGamePressed}>YES, CONTINUE</div>
                     <br/><br/>
                     <div className={`${styles.button} ${styles.leaveButton}`} onClick={this.handleLeaveGameButtonPressed}>NO, LEAVE GAME</div>                    
@@ -308,10 +309,10 @@ export default class Game extends Component {
         return (
             <div className={styles.gameWrapper}>
                 <h3>{this.gameCode}</h3>
-                <h4>HC: {this.state.hostChoice}</h4>
+                {/* <h4>HC: {this.state.hostChoice}</h4>
                 <h4>GC: {this.state.guestChoice}</h4>
                 <p>Host: {this.state.isHost.toString()}</p>
-                <br/>
+                <br/> */}
 
                 <div className={styles.scoreBoard}>
                     <div className={styles.hostScore}>0</div>
@@ -319,21 +320,22 @@ export default class Game extends Component {
                     <div className={styles.guestScore}>0</div>
                 </div>
 
-                <div className={styles.matchBlock}> 
-                    <div className={styles.hostChoice}>{this.state.hostChoice}</div>
-                    <div className={styles.divider}>vs</div>
-                    <div className={styles.guestChoice}>{this.state.guestChoice}</div>
-                </div>   
+                <div className={styles.centerBlock}>
+                    <div className={styles.matchBlock}> 
+                        <div className={styles.hostChoice}>{this.state.hostChoice}</div>
+                        <div className={styles.divider}>vs</div>
+                        <div className={styles.guestChoice}>{this.state.guestChoice}</div>
+                    </div>   
+                    <div className={styles.verdictBlock}>
+                        {   (this.state.verdict == true && this.state.isHost == true) ? this.renderHostVerdict() : null }
+                        {   (this.state.verdict == true && this.state.isHost == false) ? this.renderGuestVerdict() : null  } 
+                    </div>   
+                </div>             
 
-                {   (this.state.verdict == true && this.state.isHost == true) ? this.renderHostVerdict() : <br/>  }
-                {   (this.state.verdict == true && this.state.isHost == false) ? this.renderGuestVerdict() : <br/>  }
 
-                {   this.state.isHost == true ?
-                    (this.state.hostChoice == null ? this.renderChoices() : this.renderChoicesDisabled()) : null
-                }
-                {   this.state.isHost == false ?
-                    (this.state.guestChoice == null ? this.renderChoices() : this.renderChoicesDisabled()) : null
-                }              
+
+                {   this.state.isHost == true ? (this.state.hostChoice == null ? this.renderChoices() : this.renderChoicesDisabled()) : null }
+                {   this.state.isHost == false ? (this.state.guestChoice == null ? this.renderChoices() : this.renderChoicesDisabled()) : null }              
 
                 <div className={`${styles.button} ${styles.leaveButton}`} onClick={this.handlePlayAgainButtonPressed}>PLAY AGAIN</div>
                 <div className={`${styles.button} ${styles.leaveButton}`} onClick={this.handleLeaveGameButtonPressed}>LEAVE GAME</div>

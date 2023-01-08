@@ -26,9 +26,18 @@ html, body{
 #app{
     height: 100%;
     width: 100%;
-    background: url(../images/background.svg);
+    background-image: url(../images/background.svg);
     background-size: cover;
     background-position:center;
+}
+
+@keyframes rotate {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
 }
 
 .center {

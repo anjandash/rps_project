@@ -1,6 +1,5 @@
 .gameWrapper{
   padding: 20;
-  background-color: red;
   text-align: center;
 }
 
@@ -61,17 +60,181 @@
   background-color: blue;
 }
 
+.choiceBlock{
+  border-radius: 7px;
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  -o-border-radius: 7px;
+
+  width: 430px;
+  margin: 20px auto;
+  padding: 20px 25px;
+
+  background-color: rgb(253,221,131);
+
+  box-shadow: 0px 0.4em rgb(252,200,56), 2px 0.4em rgb(252,200,56), -2px 0.4em rgb(252,200,56);
+  /* -webkit-box-shadow: 0px 1px 2px rgb(252,200,56,0.3),0px 2px 3px rgb(252,200,56,0.6), 0px 3px 6px rgb(251,189,15,0.9);;
+  -moz-box-shadow: 0px 1px 2px rgb(252,200,56,0.3),0px 2px 3px rgb(252,200,56,0.6), 0px 3px 6px rgb(251,189,15,0.9);;
+  -ms-box-shadow: 0px 1px 2px rgb(252,200,56,0.3),0px 2px 3px rgb(252,200,56,0.6), 0px 3px 6px rgb(251,189,15,0.9);;
+  -o-box-shadow: 0px 1px 2px rgb(252,200,56,0.3),0px 2px 3px rgb(252,200,56,0.6), 0px 3px 6px rgb(251,189,15,0.9);;     */
+
+  display: flex;
+  justify-content: space-between;
+}
+
+.rock{
+  height: 120px;
+  width: 120px;
+
+  border: 1px solid rgb(252,200,56,0.9);
+
+  border-radius: 60px;
+  -webkit-border-radius: 60px;
+  -moz-border-radius: 60px;
+  -o-border-radius: 60px;  
+
+  background-color: white;
+
+  box-shadow: 0px 1px 2px rgb(252,200,56,0.3),0px 2px 3px rgb(252,200,56,0.6), 0px 3px 6px rgb(251,189,15,0.9);;
+  -webkit-box-shadow: 0px 1px 2px rgb(252,200,56,0.3),0px 2px 3px rgb(252,200,56,0.6), 0px 3px 6px rgb(251,189,15,0.9);;
+  -moz-box-shadow: 0px 1px 2px rgb(252,200,56,0.3),0px 2px 3px rgb(252,200,56,0.6), 0px 3px 6px rgb(251,189,15,0.9);;
+  -ms-box-shadow: 0px 1px 2px rgb(252,200,56,0.3),0px 2px 3px rgb(252,200,56,0.6), 0px 3px 6px rgb(251,189,15,0.9);;
+  -o-box-shadow: 0px 1px 2px rgb(252,200,56,0.3),0px 2px 3px rgb(252,200,56,0.6), 0px 3px 6px rgb(251,189,15,0.9);;  
+
+  position: relative;
+  cursor: pointer;
+}
+
+.rockChild{
+  height: 70%;
+  width: 70%;
+
+  margin: auto;
+  background-image: url(../images/rock-em.png);
+  background-size: cover;
+
+  position: absolute;
+  margin: auto;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+
+.paper{
+  height: 120px;
+  width: 120px;
+
+  border-radius: 60px;
+  -webkit-border-radius: 60px;
+  -moz-border-radius: 60px;
+  -o-border-radius: 60px;  
+
+  background-color: white;
+
+
+  box-shadow: 0px 1px 2px rgb(252,200,56,0.3),0px 2px 3px rgb(252,200,56,0.6), 0px 3px 6px rgb(251,189,15,0.9);;
+  -webkit-box-shadow: 0px 1px 2px rgb(252,200,56,0.3),0px 2px 3px rgb(252,200,56,0.6), 0px 3px 6px rgb(251,189,15,0.9);;
+  -moz-box-shadow: 0px 1px 2px rgb(252,200,56,0.3),0px 2px 3px rgb(252,200,56,0.6), 0px 3px 6px rgb(251,189,15,0.9);;
+  -ms-box-shadow: 0px 1px 2px rgb(252,200,56,0.3),0px 2px 3px rgb(252,200,56,0.6), 0px 3px 6px rgb(251,189,15,0.9);;
+  -o-box-shadow: 0px 1px 2px rgb(252,200,56,0.3),0px 2px 3px rgb(252,200,56,0.6), 0px 3px 6px rgb(251,189,15,0.9);;  
+
+  position: relative;
+  cursor: pointer;
+}
+
+.paperChild{
+  height: 80%;
+  width: 80%;
+
+  margin: auto;
+  background-image: url(../images/paper-em.png);
+  background-size: cover;
+
+  position: absolute;
+  margin: auto;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0.6em;
+}
+
+.scissors{
+  height: 120px;
+  width: 120px;
+
+  border-radius: 60px;
+  -webkit-border-radius: 60px;
+  -moz-border-radius: 60px;
+  -o-border-radius: 60px;  
+
+  background-color: white;
+
+  box-shadow: 0px 1px 2px rgb(252,200,56,0.3),0px 2px 3px rgb(252,200,56,0.6), 0px 3px 6px rgb(251,189,15,0.9);;
+  -webkit-box-shadow: 0px 1px 2px rgb(252,200,56,0.3),0px 2px 3px rgb(252,200,56,0.6), 0px 3px 6px rgb(251,189,15,0.9);;
+  -moz-box-shadow: 0px 1px 2px rgb(252,200,56,0.3),0px 2px 3px rgb(252,200,56,0.6), 0px 3px 6px rgb(251,189,15,0.9);;
+  -ms-box-shadow: 0px 1px 2px rgb(252,200,56,0.3),0px 2px 3px rgb(252,200,56,0.6), 0px 3px 6px rgb(251,189,15,0.9);;
+  -o-box-shadow: 0px 1px 2px rgb(252,200,56,0.3),0px 2px 3px rgb(252,200,56,0.6), 0px 3px 6px rgb(251,189,15,0.9);;  
+
+  position: relative;
+  cursor: pointer;
+}
+
+.scissorsChild{
+  height: 80%;
+  width: 80%;
+
+  margin: auto;
+  background-image: url(../images/scissors-em.png);
+  background-size: cover;
+
+  position: absolute;
+  margin: auto;
+  top: -0.6em;
+  right: 0;
+  bottom: 0;
+  left: -0.4em;
+}
+
+
+
+
+.centerBlock{
+  border-radius: 7px;
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  -o-border-radius: 7px;
+
+  width: 650px;
+  height: 300px;
+  margin: 0px auto;
+  padding: 5px;
+
+  background-color: green;
+
+  box-shadow: 0px 0.4em rgb(6, 85, 0), 2px 0.4em rgb(6,85,0), -2px 0.4em rgb(6,85,0);
+  /* -webkit-box-shadow: 0px 1px 2px rgb(252,200,56,0.3),0px 2px 3px rgb(252,200,56,0.6), 0px 3px 6px rgb(251,189,15,0.9);;
+  -moz-box-shadow: 0px 1px 2px rgb(252,200,56,0.3),0px 2px 3px rgb(252,200,56,0.6), 0px 3px 6px rgb(251,189,15,0.9);;
+  -ms-box-shadow: 0px 1px 2px rgb(252,200,56,0.3),0px 2px 3px rgb(252,200,56,0.6), 0px 3px 6px rgb(251,189,15,0.9);;
+  -o-box-shadow: 0px 1px 2px rgb(252,200,56,0.3),0px 2px 3px rgb(252,200,56,0.6), 0px 3px 6px rgb(251,189,15,0.9);;     */
+    
+  overflow: hidden;
+}
+
+
 .matchBlock{
   border-radius: 7px;
   -webkit-border-radius: 7px;
   -moz-border-radius: 7px;
   -o-border-radius: 7px;
 
-  width: 500px;
-  margin: 20px auto;
+  width: 600px;
+  height: 180px;
+  margin: 5px auto 20px;
   padding: 20px;
 
-  background-color: green;
+  background-color: blueviolet;
 
   display: flex;
   justify-content: space-evenly;
@@ -95,39 +258,28 @@
   background-color: red;
 }
 
-.choiceBlock{
+
+.verdictBlock{
+  height: 40px;
+  width: 80%;
+
   border-radius: 7px;
   -webkit-border-radius: 7px;
   -moz-border-radius: 7px;
-  -o-border-radius: 7px;
+  -o-border-radius: 7px;  
 
-  width: 350px;
-  margin: 20px auto;
-  padding: 20px;
+  border: 2px solid goldenrod;
 
-  background-color: green;
-
-  display: flex;
-  justify-content: space-between;
+  background-color: gold;
+  margin: 0px auto;
 }
 
-.rock{
-  height: 100px;
-  width: 100px;
-  background-color: gray;
+.verdictText{
+  text-align: center;
 
+  padding: 10px;
 }
 
-.paper{
-  height: 100px;
-  width: 100px;
-  background-color: white;
-  
-}
-
-.scissors{
-  height: 100px;
-  width: 100px;
-  background-color: yellow;
-  
+.continueText{
+  text-align: center;
 }
