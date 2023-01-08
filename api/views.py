@@ -99,10 +99,17 @@ class LeaveGame(APIView):
 
             host_id  = self.request.session.session_key
             queryset = Game.objects.filter(host=host_id)
-            if len(queryset) > 0: # not queryset.exists()
+            if queryset.exists():
                 game = queryset[0]
                 game.delete()
-        return Response({'Message': 'Success'}, status=status.HTTP_200_OK)        
+            # else:
+            #     guest_id = self.request.session.session_key
+            #     queryset = Game.objects.filter(guest=guest_id)
+            #     if queryset.exists():
+            #         game = queryset[0]   
+            #         game.guest = None
+            #         game.save(update_fields=['guest'])             
+        return Response({'Message': 'The Game was abandoned!'}, status=status.HTTP_200_OK)        
     
 
 class PlayGame(APIView):
@@ -144,7 +151,7 @@ class ReplayGame(APIView):
                 game.host_play_again = serializer.data.get('host_play_again')
                 game.guest_choice = serializer.data.get('guest_choice')
                 game.guest_play_again = serializer.data.get('guest_play_again')
-                game.save(update_fields=['host_choice', 'guest_choice'])
+                game.save(update_fields=['host_choice', 'host_play_again', 'guest_choice', 'guest_play_again'])
 
                 return Response(PlayGameSerializer(game).data, status=status.HTTP_200_OK)            
         return Response({'Bad Request': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)        
