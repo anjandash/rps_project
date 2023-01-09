@@ -25,13 +25,17 @@ export default class CreateGamePage extends Component {
     render() {
         return (
             <div className={styles.wrapper}>
-                <div className={`${styles.button} ${styles.createButton}`} onClick={this.handleCreateGameButtonPressed}>
-                    CREATE NEW GAME
-                </div>
-                <br/><br/>
-                <div>
-                    <Link to="/" className={`${styles.button} ${styles.backButton}`}>BACK</Link>
-                </div>                
+                <div className={styles.genericCard}>
+                    <div className={styles.logoTextHome}>ROCK. PAPER. SCISSORS.</div>
+                    <div className={styles.logoSubtitle}>By @anjandash / liqi</div>                    
+                    <div className={`${styles.button} ${styles.createButton}`} onClick={this.handleCreateGameButtonPressed}>
+                        PLAY WITH A FRIEND
+                    </div>
+                    <Link to="/" className={`${styles.button} ${styles.backButton} ${styles.buttonDisabled}`}>PLAY WITH COMPUTER</Link>
+                    <div>
+                        <Link to="/" className={`${styles.button} ${styles.backButton}`}>BACK</Link>
+                    </div>    
+                </div>            
             </div>
         );
     }

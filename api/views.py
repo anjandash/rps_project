@@ -102,13 +102,13 @@ class LeaveGame(APIView):
             if queryset.exists():
                 game = queryset[0]
                 game.delete()
-            # else:
-            #     guest_id = self.request.session.session_key
-            #     queryset = Game.objects.filter(guest=guest_id)
-            #     if queryset.exists():
-            #         game = queryset[0]   
-            #         game.guest = None
-            #         game.save(update_fields=['guest'])             
+            else:
+                guest_id = self.request.session.session_key
+                queryset = Game.objects.filter(guest=guest_id)
+                if queryset.exists():
+                    game = queryset[0]   
+                    game.guest = None
+                    game.save(update_fields=['guest'])             
         return Response({'Message': 'The Game was abandoned!'}, status=status.HTTP_200_OK)        
     
 

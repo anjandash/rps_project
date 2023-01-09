@@ -216,31 +216,35 @@ export default class Game extends Component {
 
     renderChoices(){
         return(
+            <div className={styles.wrapBlock}>
             <div className={styles.choiceBlock}> 
-                <div className={styles.rock} onClick={this.handleUserChoice.bind(this, "rock")}><div className={styles.rockChild}></div></div>
-                <div className={styles.paper} onClick={this.handleUserChoice.bind(this, "paper")}><div className={styles.paperChild}></div></div>
-                <div className={styles.scissors} onClick={this.handleUserChoice.bind(this, "scissors")}><div className={styles.scissorsChild}></div></div>
+                <div className={`${styles.rock} ${styles.choice}`} onClick={this.handleUserChoice.bind(this, "rock")}><div className={styles.rockChild}></div></div>
+                <div className={`${styles.paper} ${styles.choice}`} onClick={this.handleUserChoice.bind(this, "paper")}><div className={styles.paperChild}></div></div>
+                <div className={`${styles.scissors} ${styles.choice}`} onClick={this.handleUserChoice.bind(this, "scissors")}><div className={styles.scissorsChild}></div></div>
+            </div>
             </div>
         );
     }
 
     renderChoicesDisabled(){
         return(
+            <div className={styles.wrapBlock}>
             <div className={styles.choiceBlock}> 
                 <div className={styles.rock} style={{opacity: 0.5}} disabled><div className={styles.rockChild}></div></div>
                 <div className={styles.paper} style={{opacity: 0.5}} disabled><div className={styles.paperChild}></div></div>
                 <div className={styles.scissors} style={{opacity: 0.5}} disabled><div className={styles.scissorsChild}></div></div>
             </div>
+            </div>
         );
     }    
 
-    renderHostVerdict(){
+    renderHostResultVerdict(){
         return(
             <div className={styles.verdictText}>{this.state.messageForHost}</div>
         );
     }
 
-    renderGuestVerdict(){
+    renderGuestResultVerdict(){
         return(
             <div className={styles.verdictText}>{this.state.messageForGuest}</div>
         );
@@ -300,44 +304,53 @@ export default class Game extends Component {
                 <div className={styles.continueText}>
                     Your friend wants to play once more!
                     <br/><br/>
-                    <div className={`${styles.button} ${styles.leaveButton}`} onClick={this.handleContinueGamePressed}>YES, CONTINUE</div>
+                    <div className={`${styles.button} ${styles.yesButton}`} onClick={this.handleContinueGamePressed}>YES, CONTINUE</div>
                     <br/><br/>
-                    <div className={`${styles.button} ${styles.leaveButton}`} onClick={this.handleLeaveGameButtonPressed}>NO, LEAVE GAME</div>                    
+                    <div className={`${styles.button} ${styles.leaveButton}`} onClick={this.handleLeaveGameButtonPressed}>LEAVE GAME</div>                    
                 </div>
             );
         }
         return (
             <div className={styles.gameWrapper}>
-                <h3>{this.gameCode}</h3>
+                <h3>Game code: {this.gameCode}</h3>
                 {/* <h4>HC: {this.state.hostChoice}</h4>
                 <h4>GC: {this.state.guestChoice}</h4>
                 <p>Host: {this.state.isHost.toString()}</p>
                 <br/> */}
 
-                <div className={styles.scoreBoard}>
-                    <div className={styles.hostScore}>0</div>
-                    <div className={styles.scoreDivider}>vs</div>
-                    <div className={styles.guestScore}>0</div>
+                <div className={styles.mainHeadBlock}>
+                <div className={styles.scoreBlock}>
+                    <div className={styles.namePlateHost}>{this.state.isHost ? "You" : "Host"}</div>
+                    <div className={styles.scoreBoard}>
+                        <div className={styles.hostScore}>0</div>
+                        <div className={styles.scoreDivider}></div>
+                        <div className={styles.guestScore}>0</div>
+                    </div>
+                    <div className={styles.namePlateGuest}>{this.state.isHost ? "Guest" : "You"}</div>
+                </div>
                 </div>
 
                 <div className={styles.centerBlock}>
                     <div className={styles.matchBlock}> 
                         <div className={styles.hostChoice}>{this.state.hostChoice}</div>
-                        <div className={styles.divider}>vs</div>
+                        <div className={styles.divider}><div className={styles.vsDiv}>vs</div></div>
                         <div className={styles.guestChoice}>{this.state.guestChoice}</div>
                     </div>   
-                    <div className={styles.verdictBlock}>
-                        {   (this.state.verdict == true && this.state.isHost == true) ? this.renderHostVerdict() : null }
-                        {   (this.state.verdict == true && this.state.isHost == false) ? this.renderGuestVerdict() : null  } 
-                    </div>   
-                </div>             
+                </div>           
+                <div className={styles.verdictBlock}>
+                    {   (this.state.verdict == true && this.state.isHost == true) ? this.renderHostResultVerdict() : null }
+                    {   (this.state.verdict == true && this.state.isHost == false) ? this.renderGuestResultVerdict() : null  }
+                    {   (this.state.hostChoice == null && this.state.guestChoice == null) ? <div className={styles.verdictText}>Click on ROCK or PAPER or SCISSORS!</div> : null }
+                    {   ((this.state.hostChoice == null && this.state.guestChoice != null) && (this.state.verdict == false)) ? <div className={styles.verdictText}>Waiting for host's choice ...</div> : null }
+                    {   ((this.state.hostChoice != null && this.state.guestChoice == null) && (this.state.verdict == false)) ? <div className={styles.verdictText}>Waiting for guest's choice ...</div> : null }
+                </div>                     
 
 
 
                 {   this.state.isHost == true ? (this.state.hostChoice == null ? this.renderChoices() : this.renderChoicesDisabled()) : null }
                 {   this.state.isHost == false ? (this.state.guestChoice == null ? this.renderChoices() : this.renderChoicesDisabled()) : null }              
 
-                <div className={`${styles.button} ${styles.leaveButton}`} onClick={this.handlePlayAgainButtonPressed}>PLAY AGAIN</div>
+                <div className={`${styles.button} ${styles.playAgainButton}`} onClick={this.handlePlayAgainButtonPressed}>PLAY AGAIN</div>
                 <div className={`${styles.button} ${styles.leaveButton}`} onClick={this.handleLeaveGameButtonPressed}>LEAVE GAME</div>
             </div>
         );

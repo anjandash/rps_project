@@ -48,12 +48,13 @@ export default class JoinGamePage extends Component {
     render() {
         return (
             <div align="center" className={styles.wrapper}>
-                <h6>JOIN A GAME</h6>
-                <input className={styles.inputCodeField} type="text" placeholder="Enter Game Code" autocomplete="off" required="required" onChange={this.handleTextFieldChange}></input>
-                <br/><br/>
-                <div className={`${styles.button} ${styles.joinButton}`} onClick={this.handleEnterGameButtonPressed}>JOIN GAME</div>
-                <br/><br/>
-                <Link to="/" className={`${styles.button} ${styles.backButton}`}>BACK</Link>
+                <div className={styles.genericCard}>
+                    <input className={styles.inputCodeField} type="text" placeholder="Enter Game Code" autocomplete="off" required="required" onChange={this.handleTextFieldChange}></input>
+                    <div className={styles.codeMessage}>If you don't have a code, you can go back and create a new game.</div>
+                    <div className={`${styles.button} ${styles.joinButton}`} onClick={this.handleEnterGameButtonPressed}>JOIN GAME</div>
+                    <br/>
+                    <Link to="/" className={`${styles.button} ${styles.backButton}`}>BACK</Link>
+                </div>
             </div>
         );
     }

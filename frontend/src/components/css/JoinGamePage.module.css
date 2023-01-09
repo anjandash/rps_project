@@ -1,7 +1,33 @@
 .wrapper{
     padding: 20;
-    background-color: pink;
     text-align: center;
+}
+
+.genericCard{
+    width: 600px;
+    height: 300px;
+
+    margin: 0px auto;
+    text-align: center;
+
+    background-color: blueviolet;
+    box-shadow: 0px 0.4em rgb(105, 0, 204), inset 0px 0px 60px 10px rgba(54, 0, 88, 0.5);
+
+    border-radius: 7px;
+    padding: 1px 0px;
+}
+
+.codeMessage{
+    width: 300px;
+    font-size: 14px;
+    color: rgb(69, 0, 133);
+
+    margin: 10px auto 12px;  
+    border: 1px solid transparent; 
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;    
 }
 
 .button{
@@ -18,7 +44,12 @@
     font-weight: bold;
     text-decoration: none;
     cursor: pointer;
+    transition: width 0.5s ease-in-out, height 0.5s ease-in-out;
 }
+
+/* .button:hover{
+  transform: scale(1.05);
+} */
 
 .button:active {
 	box-shadow: none;
@@ -31,6 +62,8 @@
     color: gray;
     text-shadow: -1px -1px black, 1px 1px white;
     box-shadow: 0 .2em gray; 
+
+    margin-bottom: 12px;    
 }
 
 .backButton{
@@ -38,6 +71,10 @@
     color: gray;
     text-shadow: -1px -1px black, 1px 1px white;
     box-shadow: 0 .2em gray; 
+}
+
+.inputCodeField{
+    margin-top: 25px;;
 }
 
 input[type=text] {
