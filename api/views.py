@@ -50,7 +50,7 @@ class JoinGame(APIView):
                     game.guest = self.request.session.session_key
                     game.save(update_fields=['guest'])
                 else:
-                    return Response({'message': 'Sorry! Another player joined the game!'}, status=status.HTTP_400_BAD_REQUEST)
+                    return Response({'message': 'Sorry! Another player joined this game!'}, status=status.HTTP_400_BAD_REQUEST)
 
                 self.request.session['game_code'] = code
                 return Response({'message': 'Game Joined!'}, status=status.HTTP_200_OK)

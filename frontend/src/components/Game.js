@@ -102,6 +102,7 @@ export default class Game extends Component {
                     verdict: true,
                 });   
             }
+            console.log(data.host_choice, data.guest_choice)
 
             if (data.host_play_again == true || data.guest_play_again == true){
                 if (data.host_play_again == true && data.guest_play_again == false){
@@ -255,13 +256,13 @@ export default class Game extends Component {
         if (this.state.isHost == true){
             json_data = {
                 host_choice: null,
-                guest_choice: null,
+                guest_choice: this.state.guestChoice,
                 host_play_again: false,
                 guest_play_again: false,
             };   
         } else {
             json_data = {
-                host_choice: null,
+                host_choice: this.state.hostChoice,
                 guest_choice: null,
                 host_play_again: false,
                 guest_play_again: false,  
@@ -286,8 +287,8 @@ export default class Game extends Component {
         .then((data) => {
             console.log(data);
             this.setState({
-            hostChoice: null,
-            guestChoice: null,
+            hostChoice: json_data.host_choice,
+            guestChoice: json_data.guest_choice,
             verdict: false,
             messageForHost: null,
             messageForGuest: null,
@@ -347,7 +348,7 @@ export default class Game extends Component {
 
 
 
-                {   this.state.isHost == true ? (this.state.hostChoice == null ? this.renderChoices() : this.renderChoicesDisabled()) : null }
+                {   this.state.isHost == true ? (this.state.hostChoice == null ?  this.renderChoices() : this.renderChoicesDisabled()) : null }
                 {   this.state.isHost == false ? (this.state.guestChoice == null ? this.renderChoices() : this.renderChoicesDisabled()) : null }              
 
                 <div className={`${styles.button} ${styles.playAgainButton}`} onClick={this.handlePlayAgainButtonPressed}>PLAY AGAIN</div>

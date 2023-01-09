@@ -4,7 +4,7 @@ from .models import Game
 class GameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Game 
-        fields = ('id', 'code', 'host', 'guest', 'host_choice', 'host_play_again', 'guest_choice', 'guest_play_again', 'created_at')
+        fields = ('id', 'code', 'host', 'guest', 'host_choice', 'host_play_again', 'host_score', 'guest_choice', 'guest_play_again', 'guest_score', 'created_at')
 
 class JoinGameSerializer(serializers.ModelSerializer):
     class Meta:
