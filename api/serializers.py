@@ -19,9 +19,9 @@ class CreateGameSerializer(serializers.ModelSerializer):
 class PlayGameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Game 
-        fields = ('host_choice', 'guest_choice')
+        fields = ('host_choice', 'host_score', 'guest_choice', 'guest_score')
 
 class ReplayGameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Game 
-        fields = ('host_choice', 'host_play_again', 'guest_choice', 'guest_play_again')        
+        fields = ('host_choice', 'host_play_again', 'host_score', 'guest_choice', 'guest_play_again', 'guest_score')        

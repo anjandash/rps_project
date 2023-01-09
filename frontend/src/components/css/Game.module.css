@@ -438,6 +438,7 @@
 
   position: relative;
   cursor: pointer;
+  transition: scale 0.5s ease-in-out;
 }
 
 /* .rock:hover{
@@ -485,6 +486,7 @@
 
   position: relative;
   cursor: pointer;
+  transition: scale 0.5s ease-in-out;
 }
 
 /* .paper:hover{
@@ -531,6 +533,8 @@
 
   position: relative;
   cursor: pointer;
+
+  transition: scale 0.5s ease-in-out;
 }
 
 /* .scissors:hover{
@@ -557,5 +561,9 @@
   left: -0.4em;
 }
 
+.selected{
+  border: 2px solid yellow;
+  transform: scale(1.1);
+}
 
 

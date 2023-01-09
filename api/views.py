@@ -126,10 +126,44 @@ class PlayGame(APIView):
             else:
                 game = queryset[0]
                 if serializer.data.get('host_choice') is not None:
-                    game.host_choice = serializer.data.get('host_choice')
+                    game.host_choice = str(serializer.data.get('host_choice'))
                 if serializer.data.get('guest_choice') is not None:
-                    game.guest_choice = serializer.data.get('guest_choice')
-                game.save(update_fields=['host_choice', 'guest_choice'])
+                    game.guest_choice = str(serializer.data.get('guest_choice'))
+                if serializer.data.get('host_score') is not None:
+                    game.host_score = int(serializer.data.get('host_score'))
+                if serializer.data.get('guest_score') is not None:
+                    game.guest_score = int(serializer.data.get('guest_score'))
+
+                # game logic 
+                _host_choice  = game.host_choice
+                _guest_choice = game.guest_choice
+                _host_score   = game.host_score
+                _guest_score  = game.guest_score
+
+                if _host_choice is not None and _guest_choice is not None:
+                    if _host_score is not None and _guest_score is not None:                      
+
+                        if _host_choice == _guest_choice:
+                            game.host_score = _host_score
+                            game.guest_score = _guest_score
+
+                        elif _host_choice == "rock" and _guest_choice == "paper":
+                            game.host_score = _host_score
+                            game.guest_score = _guest_score + 1
+
+                        elif _host_choice == "paper" and _guest_choice == "scissors":
+                            game.host_score = _host_score
+                            game.guest_score = _guest_score + 1   
+
+                        elif _host_choice == "scissors" and _guest_choice == "rock":
+                            game.host_score = _host_score
+                            game.guest_score = _guest_score + 1      
+
+                        else:
+                            game.host_score = _host_score + 1
+                            game.guest_score = _guest_score                             
+
+                game.save(update_fields=['host_choice', 'host_score', 'guest_choice', 'guest_score'])
 
                 return Response(PlayGameSerializer(game).data, status=status.HTTP_200_OK)            
         return Response({'Bad Request': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
@@ -151,7 +185,42 @@ class ReplayGame(APIView):
                 game.host_play_again = serializer.data.get('host_play_again')
                 game.guest_choice = serializer.data.get('guest_choice')
                 game.guest_play_again = serializer.data.get('guest_play_again')
-                game.save(update_fields=['host_choice', 'host_play_again', 'guest_choice', 'guest_play_again'])
+
+                if serializer.data.get('host_score') is not None:
+                    game.host_score = int(serializer.data.get('host_score'))
+                if serializer.data.get('guest_score') is not None:
+                    game.guest_score = int(serializer.data.get('guest_score'))              
+
+                # game logic 
+                _host_choice  = game.host_choice
+                _guest_choice = game.guest_choice
+                _host_score   = game.host_score
+                _guest_score  = game.guest_score
+
+                if _host_choice is not None and _guest_choice is not None:
+                    if _host_score is not None and _guest_score is not None:                      
+
+                        if _host_choice == _guest_choice:
+                            game.host_score = _host_score
+                            game.guest_score = _guest_score
+
+                        elif _host_choice == "rock" and _guest_choice == "paper":
+                            game.host_score = _host_score
+                            game.guest_score = _guest_score + 1
+
+                        elif _host_choice == "paper" and _guest_choice == "scissors":
+                            game.host_score = _host_score
+                            game.guest_score = _guest_score + 1   
+
+                        elif _host_choice == "scissors" and _guest_choice == "rock":
+                            game.host_score = _host_score
+                            game.guest_score = _guest_score + 1      
+
+                        else:
+                            game.host_score = _host_score + 1
+                            game.guest_score = _guest_score                                                                                      
+
+                game.save(update_fields=['host_choice', 'host_play_again', 'host_score', 'guest_choice', 'guest_play_again', 'guest_score'])
 
                 return Response(PlayGameSerializer(game).data, status=status.HTTP_200_OK)            
         return Response({'Bad Request': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)        

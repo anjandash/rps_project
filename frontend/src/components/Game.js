@@ -13,6 +13,8 @@ export default class Game extends Component {
             
             hostplayAgain: false,
             guestPlayAgain: false,
+            hostScore: 0,
+            guestScore: 0,
 
             verdict: false,
             messageForHost: null,
@@ -97,13 +99,15 @@ export default class Game extends Component {
                 this.setState({
                     hostChoice: data.host_choice,
                     guestChoice: data.guest_choice,
+                    hostScore: data.host_score,
+                    guestScore: data.guest_score,
                     messageForHost: message_for_host,
                     messageForGuest: message_for_guest,
                     verdict: true,
                 });   
             }
 
-            console.log(data.host_choice, data.guest_choice)
+            console.log(data.host_choice, data.guest_choice, data.host_score, data.guest_score)
             this.setState({
                 hostChoice: data.host_choice,
                 guestChoice: data.guest_choice,
@@ -147,6 +151,8 @@ export default class Game extends Component {
             json_data = {
                 host_choice: null,
                 guest_choice: null,
+                host_score: this.state.hostScore,
+                guest_score: this.state.guestScore,
                 host_play_again: true,
                 guest_play_again: this.state.guestPlayAgain,
             };   
@@ -154,6 +160,8 @@ export default class Game extends Component {
             json_data = {
                 host_choice: null,
                 guest_choice: null,
+                host_score: this.state.hostScore,
+                guest_score: this.state.guestScore,
                 host_play_again: this.state.hostplayAgain,
                 guest_play_again: true,
             };   
@@ -186,17 +194,20 @@ export default class Game extends Component {
         });
     }
 
+
+
+
     handleUserChoice(value) {
         console.log("handleUserChoice Pressed with value: " + value)
         console.log(this.gameCode)
         if (this.state.isHost == true){
             this.setState({
                 hostChoice: value,
-            }, () => {this.fetchData({host_choice: this.state.hostChoice});});
+            }, () => {this.fetchData({host_choice: this.state.hostChoice, host_score: this.state.hostScore, guest_score: this.state.guestScore});});
         } else {
             this.setState({
                 guestChoice: value,
-            }, () => {this.fetchData({guest_choice: this.state.guestChoice});});            
+            }, () => {this.fetchData({guest_choice: this.state.guestChoice, host_score: this.state.hostScore, guest_score: this.state.guestScore});});            
         }
     }
 
@@ -234,12 +245,42 @@ export default class Game extends Component {
 
     renderChoicesDisabled(){
         return(
-            <div className={styles.wrapBlock}>
-            <div className={styles.choiceBlock}> 
-                <div className={styles.rock} style={{opacity: 0.5}} disabled><div className={styles.rockChild}></div></div>
-                <div className={styles.paper} style={{opacity: 0.5}} disabled><div className={styles.paperChild}></div></div>
-                <div className={styles.scissors} style={{opacity: 0.5}} disabled><div className={styles.scissorsChild}></div></div>
-            </div>
+            <div>
+            {this.state.isHost ? 
+                <div className={styles.wrapBlock}>
+                <div className={styles.choiceBlock}> 
+                    {this.state.hostChoice == "rock" ? 
+                        <div className={`${styles.rock} ${styles.selected}`} style={{opacity: 1}} disabled><div className={styles.rockChild}></div></div> :
+                        <div className={`${styles.rock}`} style={{opacity: 0.5}} disabled><div className={styles.rockChild}></div></div> 
+                    }
+                    {this.state.hostChoice == "paper" ?                 
+                        <div className={`${styles.paper} ${styles.selected}`} style={{opacity: 1}} disabled><div className={styles.paperChild}></div></div> :
+                        <div className={`${styles.paper}`} style={{opacity: 0.5}} disabled><div className={styles.paperChild}></div></div>
+                    }
+                    {this.state.hostChoice == "scissors" ?                   
+                        <div className={`${styles.scissors} ${styles.selected}`} style={{opacity: 1}} disabled><div className={styles.scissorsChild}></div></div> :
+                        <div className={`${styles.scissors}`} style={{opacity: 0.5}} disabled><div className={styles.scissorsChild}></div></div> 
+                    }
+                </div>
+                </div>
+            : 
+                <div className={styles.wrapBlock}>
+                <div className={styles.choiceBlock}> 
+                    {this.state.guestChoice == "rock" ? 
+                        <div className={`${styles.rock} ${styles.selected}`} style={{opacity: 1}} disabled><div className={styles.rockChild}></div></div> :
+                        <div className={`${styles.rock}`} style={{opacity: 0.5}} disabled><div className={styles.rockChild}></div></div> 
+                    }
+                    {this.state.guestChoice == "paper" ?                 
+                        <div className={`${styles.paper} ${styles.selected}`} style={{opacity: 1}} disabled><div className={styles.paperChild}></div></div> :
+                        <div className={`${styles.paper}`} style={{opacity: 0.5}} disabled><div className={styles.paperChild}></div></div>
+                    }
+                    {this.state.guestChoice == "scissors" ?                   
+                        <div className={`${styles.scissors} ${styles.selected}`} style={{opacity: 1}} disabled><div className={styles.scissorsChild}></div></div> :
+                        <div className={`${styles.scissors}`} style={{opacity: 0.5}} disabled><div className={styles.scissorsChild}></div></div> 
+                    }
+                </div>
+                </div>            
+            }
             </div>
         );
     }    
@@ -292,14 +333,14 @@ export default class Game extends Component {
         .then((data) => {
             console.log(data);
             this.setState({
-            hostChoice: json_data.host_choice,
-            guestChoice: json_data.guest_choice,
-            verdict: false,
-            messageForHost: null,
-            messageForGuest: null,
-            playDecision: false,
-            hostplayAgain: false,
-            guestPlayAgain: false,
+                hostChoice: json_data.host_choice,
+                guestChoice: json_data.guest_choice,
+                verdict: false,
+                messageForHost: null,
+                messageForGuest: null,
+                playDecision: false,
+                hostplayAgain: false,
+                guestPlayAgain: false,
             });
         });
     }
@@ -328,9 +369,9 @@ export default class Game extends Component {
                     <div className={styles.scoreBlock}>
                         <div className={styles.namePlateHost}>{this.state.isHost ? "You" : "Host"}</div>
                         <div className={styles.scoreBoard}>
-                            <div className={styles.hostScore}>0</div>
+                            <div className={styles.hostScore}>{this.state.hostScore}</div>
                             <div className={styles.scoreDivider}></div>
-                            <div className={styles.guestScore}>0</div>
+                            <div className={styles.guestScore}>{this.state.guestScore}</div>
                         </div>
                         <div className={styles.namePlateGuest}>{this.state.isHost ? "Guest" : "You"}</div>
                     </div>
@@ -338,9 +379,9 @@ export default class Game extends Component {
 
                 <div className={styles.centerBlock}>
                     <div className={styles.matchBlock}> 
-                        <div className={styles.hostChoice}>{(this.state.hostChoice != null && this.state.guestChoice != null) ? this.state.hostChoice : null }</div>
+                        <div className={styles.hostChoice}>{(this.state.hostChoice != null && this.state.guestChoice != null) ? (this.state.isHost == true ? ("You chose " + this.state.hostChoice) : ("Host chose " +  this.state.hostChoice)) : null }</div>
                         <div className={styles.divider}><div className={styles.vsDiv}>vs</div></div>
-                        <div className={styles.guestChoice}>{(this.state.hostChoice != null && this.state.guestChoice != null) ? this.state.guestChoice : null }</div>
+                        <div className={styles.guestChoice}>{(this.state.hostChoice != null && this.state.guestChoice != null) ? (this.state.isHost == false ? ("You chose " + this.state.guestChoice) : ("Guest chose " +  this.state.guestChoice)) : null }</div>
                     </div>   
                 </div>           
                 <div className={styles.verdictBlock}>
