@@ -102,7 +102,12 @@ export default class Game extends Component {
                     verdict: true,
                 });   
             }
+
             console.log(data.host_choice, data.guest_choice)
+            this.setState({
+                hostChoice: data.host_choice,
+                guestChoice: data.guest_choice,
+            });
 
             if (data.host_play_again == true || data.guest_play_again == true){
                 if (data.host_play_again == true && data.guest_play_again == false){
@@ -172,14 +177,14 @@ export default class Game extends Component {
         .then((data) => {
             console.log(data);
             this.setState({
-            hostChoice: null,
-            guestChoice: null,
-            verdict: false,
-            messageForHost: null,
-            messageForGuest: null,
+                hostChoice: null,
+                guestChoice: null,
+                verdict: false,
+                messageForHost: null,
+                messageForGuest: null,
             });
         });
-      }
+    }
 
     handleUserChoice(value) {
         console.log("handleUserChoice Pressed with value: " + value)
@@ -320,30 +325,30 @@ export default class Game extends Component {
                 <br/> */}
 
                 <div className={styles.mainHeadBlock}>
-                <div className={styles.scoreBlock}>
-                    <div className={styles.namePlateHost}>{this.state.isHost ? "You" : "Host"}</div>
-                    <div className={styles.scoreBoard}>
-                        <div className={styles.hostScore}>0</div>
-                        <div className={styles.scoreDivider}></div>
-                        <div className={styles.guestScore}>0</div>
+                    <div className={styles.scoreBlock}>
+                        <div className={styles.namePlateHost}>{this.state.isHost ? "You" : "Host"}</div>
+                        <div className={styles.scoreBoard}>
+                            <div className={styles.hostScore}>0</div>
+                            <div className={styles.scoreDivider}></div>
+                            <div className={styles.guestScore}>0</div>
+                        </div>
+                        <div className={styles.namePlateGuest}>{this.state.isHost ? "Guest" : "You"}</div>
                     </div>
-                    <div className={styles.namePlateGuest}>{this.state.isHost ? "Guest" : "You"}</div>
-                </div>
                 </div>
 
                 <div className={styles.centerBlock}>
                     <div className={styles.matchBlock}> 
-                        <div className={styles.hostChoice}>{this.state.hostChoice}</div>
+                        <div className={styles.hostChoice}>{(this.state.hostChoice != null && this.state.guestChoice != null) ? this.state.hostChoice : null }</div>
                         <div className={styles.divider}><div className={styles.vsDiv}>vs</div></div>
-                        <div className={styles.guestChoice}>{this.state.guestChoice}</div>
+                        <div className={styles.guestChoice}>{(this.state.hostChoice != null && this.state.guestChoice != null) ? this.state.guestChoice : null }</div>
                     </div>   
                 </div>           
                 <div className={styles.verdictBlock}>
                     {   (this.state.verdict == true && this.state.isHost == true) ? this.renderHostResultVerdict() : null }
                     {   (this.state.verdict == true && this.state.isHost == false) ? this.renderGuestResultVerdict() : null  }
                     {   (this.state.hostChoice == null && this.state.guestChoice == null) ? <div className={styles.verdictText}>Click on ROCK or PAPER or SCISSORS!</div> : null }
-                    {   ((this.state.hostChoice == null && this.state.guestChoice != null) && (this.state.verdict == false)) ? <div className={styles.verdictText}>Waiting for host's choice ...</div> : null }
-                    {   ((this.state.hostChoice != null && this.state.guestChoice == null) && (this.state.verdict == false)) ? <div className={styles.verdictText}>Waiting for guest's choice ...</div> : null }
+                    {   ((this.state.hostChoice == null && this.state.guestChoice != null) && (this.state.verdict == false)) ? (this.state.isHost == false ? <div className={styles.verdictText}>Waiting for host's choice ...</div> : <div className={styles.verdictText}>Guest has already chosen! Waiting for your choice ...</div>) : null }
+                    {   ((this.state.hostChoice != null && this.state.guestChoice == null) && (this.state.verdict == false)) ? (this.state.isHost == true ? <div className={styles.verdictText}>Waiting for guest's choice ...</div> : <div className={styles.verdictText}>Host has already chosen! Waiting for your choice ...</div>) : null }
                 </div>                     
 
 
