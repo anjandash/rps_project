@@ -119,7 +119,7 @@ export default class Game extends Component {
             console.log(data.host_choice, data.guest_choice, data.host_score, data.guest_score)
             if (data.guest == null){
                 this.setState({
-                    hostChoice: null,
+                    hostChoice: this.state.hostChoice,
                     guestChoice: null,
                     
                     hostplayAgain: false,
@@ -397,7 +397,7 @@ export default class Game extends Component {
         if (this.state.playDecision == true){
             return (
                 <div className={styles.continueText}>
-                    Your friend wants to play once more!
+                    Your opponent wants to play once more!
                     <br/><br/>
                     <div className={`${styles.button} ${styles.yesButton}`} onClick={this.handleContinueGamePressed}>
                         YES, CONTINUE
@@ -413,7 +413,7 @@ export default class Game extends Component {
             <div className={styles.gameWrapper}>
                 <h3>Game code: {this.gameCode}</h3>
                 <h6>
-                    Host: <span className={styles.online}>online</span> 
+                    Host: <span className={styles.online}>online</span>&nbsp;
                     Guest: {this.state.guestOffline == true ? 
                         <span className={styles.offline}>offline</span> : 
                         <span className={styles.online}>online</span>}

@@ -289,7 +289,12 @@
 .hostChoice{
   height: 150px;
   width: 150px;
-  background-color: gray;
+  background-color: blueviolet;
+  color: rgb(58, 0, 73);
+  border: 1px solid rgb(132, 0, 255);
+  
+  box-shadow: inset 0px 0px 60px 10px rgba(54, 0, 88, 0.5);
+  
 
   border-radius: 10px;
 
@@ -301,7 +306,12 @@
 .guestChoice{
   height: 150px;
   width: 150px;
-  background-color: gray;
+  background-color: blueviolet;
+  color: rgb(58, 0, 73);
+  border: 1px solid rgb(132, 0, 255);
+
+  box-shadow: inset 0px 0px 60px 10px rgba(54, 0, 88, 0.5);
+
 
   border-radius: 10px;
 
