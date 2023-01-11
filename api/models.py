@@ -2,7 +2,7 @@ from django.db import models
 import string
 import random
 
-# generates an unique code for a 2-player game
+# generates an unique game code for a 2-player game
 def generate_unique_code():
     while True:
         code = ''.join(random.choices(string.ascii_uppercase, k=6)) 
