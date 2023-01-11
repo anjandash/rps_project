@@ -17,8 +17,11 @@ If you have any questions or feedback, please don't hesitate to email me at: anj
 
 ### Try the game online!
 
-The online version of the game is available at: http://ec2-3-84-44-18.compute-1.amazonaws.com:8000 <br/>
+> The online version of the game is available at: http://ec2-3-84-44-18.compute-1.amazonaws.com:8000 <br/>
 Make sure to have the port number (8000) at the end of the url.
+
+> Or else, simply go to: https://bit.ly/rps_game <br/>
+> *Share this link with your friends, create a game, and play together!*
 
 <hr style="height: 1px;"> 
 
