@@ -31,6 +31,7 @@ export default class Game extends Component {
         this.handleContinueGamePressed = this.handleContinueGamePressed.bind(this);
     }
 
+
     componentDidMount() {
         this.intervalId = setInterval(() => {
           this.getScores();
@@ -41,7 +42,10 @@ export default class Game extends Component {
         clearInterval(this.intervalId);
     } 
 
-    // 
+
+
+
+    // get game details and check isHost value
     getGameDetails() {
         fetch("/api/get-game" + "?code=" + this.gameCode)
         .then((response) => {
@@ -58,6 +62,8 @@ export default class Game extends Component {
         });
     }
 
+    // poll for model values
+    // TODO: replace with Django Channels/Signals & socketIO
     getScores() {
         fetch("/api/get-game" + "?code=" + this.gameCode)
         .then((response) => {
@@ -68,6 +74,7 @@ export default class Game extends Component {
             return response.json()
         })
         .then((data) => {
+            // update verdict messages, scores when game decision reached
             if (data.host_choice != null && data.guest_choice != null){
 
                 /* rps logic */
@@ -108,6 +115,7 @@ export default class Game extends Component {
                 });   
             }
 
+            // update state values if Guest goes offline/online
             console.log(data.host_choice, data.guest_choice, data.host_score, data.guest_score)
             if (data.guest == null){
                 this.setState({
@@ -135,27 +143,31 @@ export default class Game extends Component {
                 });                
             }
 
-            if (data.host_play_again == true || data.guest_play_again == true){
-                if (data.host_play_again == true && data.guest_play_again == false){
-                    if (this.state.isHost == false){
-                        console.log("Hey Guest! Play again?")
-                        this.setState({
-                            playDecision: true,
-                        });
-                        
-                    }
-                } else if (data.host_play_again == false && data.guest_play_again == true) {
-                    if (this.state.isHost == true){
-                        console.log("Hey Host! Play again?")
-                        this.setState({
-                            playDecision: true,
-                        })
-                    }                    
+            // update playDecison state value -- to trigger "game continue" prompt
+            if (data.host_play_again == true && data.guest_play_again == false){
+                if (this.state.isHost == false){
+                    this.setState({
+                        playDecision: true,
+                    });
                 }
+            } else if (data.host_play_again == false && data.guest_play_again == true) {
+                if (this.state.isHost == true){
+                    this.setState({
+                        playDecision: true,
+                    })
+                }                    
             }
-        });
-    }        
 
+
+        });
+    }     
+
+
+    // ******************************************** //
+    // ********** handle DOM/user actions ********* //
+    // ******************************************** //
+
+    // reset game status with callback, return to home page
     handleLeaveGameButtonPressed() {
         const requestOptions = {
             method: "POST",
@@ -167,6 +179,8 @@ export default class Game extends Component {
         });
     }
 
+    // reset model and state values appropriately at replay
+    // TODO: streamline
     handlePlayAgainButtonPressed() {
         let json_data;
         if (this.state.isHost == true){
@@ -216,6 +230,8 @@ export default class Game extends Component {
         });
     }
 
+    // reset model and state values appropriately at replay accept
+    // TODO: streamline
     handleContinueGamePressed(){
         let json_data;
         if (this.state.isHost == true){
@@ -264,6 +280,7 @@ export default class Game extends Component {
         });
     }    
 
+    // reset model and state values appropriately on user choice: rock/paper/scissors
     handleUserChoice(value) {
         console.log("handleUserChoice Pressed with value: " + value)
         console.log(this.gameCode)
@@ -278,6 +295,7 @@ export default class Game extends Component {
         }
     }    
 
+    // helper for handleUserChoice
     fetchData(json_data) {
         const requestOptions = {
             method: "PATCH",
@@ -298,6 +316,12 @@ export default class Game extends Component {
         });
     }
 
+
+    // ******************************************** //
+    // ************* render functions ************* //
+    // ******************************************** //
+
+    // render function to display choices
     renderChoices(){
         return(
             <div className={styles.wrapBlock}>
@@ -310,6 +334,7 @@ export default class Game extends Component {
         );
     }
 
+    // render function for displaying selected choices for host or guest
     renderChoicesDisabled(){
         return(
             <div>
@@ -352,17 +377,20 @@ export default class Game extends Component {
         );
     }    
 
+    // render function for guest result 
     renderHostResultVerdict(){
         return(
             <div className={styles.verdictText}>{this.state.messageForHost}</div>
         );
     }
 
+    // render function for guest result 
     renderGuestResultVerdict(){
         return(
             <div className={styles.verdictText}>{this.state.messageForGuest}</div>
         );
     }    
+
 
 
     render() {
@@ -371,16 +399,26 @@ export default class Game extends Component {
                 <div className={styles.continueText}>
                     Your friend wants to play once more!
                     <br/><br/>
-                    <div className={`${styles.button} ${styles.yesButton}`} onClick={this.handleContinueGamePressed}>YES, CONTINUE</div>
+                    <div className={`${styles.button} ${styles.yesButton}`} onClick={this.handleContinueGamePressed}>
+                        YES, CONTINUE
+                    </div>
                     <br/><br/>
-                    <div className={`${styles.button} ${styles.leaveButton}`} onClick={this.handleLeaveGameButtonPressed}>LEAVE GAME</div>                    
+                    <div className={`${styles.button} ${styles.leaveButton}`} onClick={this.handleLeaveGameButtonPressed}>
+                        LEAVE GAME
+                    </div>                    
                 </div>
             );
         }
         return (
             <div className={styles.gameWrapper}>
                 <h3>Game code: {this.gameCode}</h3>
-                <h6>Host: <span className={styles.online}>online</span> Guest: {this.state.guestOffline == true ? <span className={styles.offline}>offline</span> : <span className={styles.online}>online</span>}</h6>
+                <h6>
+                    Host: <span className={styles.online}>online</span> 
+                    Guest: {this.state.guestOffline == true ? 
+                        <span className={styles.offline}>offline</span> : 
+                        <span className={styles.online}>online</span>}
+                </h6>
+
                 {/* 
                 <h4>HC: {this.state.hostChoice}</h4>
                 <h4>GC: {this.state.guestChoice}</h4>
@@ -406,7 +444,8 @@ export default class Game extends Component {
                         <div className={styles.divider}><div className={styles.vsDiv}>vs</div></div>
                         <div className={styles.guestChoice}>{(this.state.hostChoice != null && this.state.guestChoice != null) ? (this.state.isHost == false ? ("You chose " + this.state.guestChoice) : ("Guest chose " +  this.state.guestChoice)) : null }</div>
                     </div>   
-                </div>           
+                </div>   
+
                 <div className={styles.verdictBlock}>
                     {   (this.state.verdict == true && this.state.isHost == true) ? this.renderHostResultVerdict() : null }
                     {   (this.state.verdict == true && this.state.isHost == false) ? this.renderGuestResultVerdict() : null  }

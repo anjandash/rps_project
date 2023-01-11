@@ -35,6 +35,7 @@ export default class HomePage extends Component {
         });
     }    
 
+    // render function for Homepage sub-component
     renderHomePage() {
         return (
             <div className={styles.wrapper}>
