@@ -10,18 +10,20 @@ export default class Game extends Component {
             isHost: false,
             hostChoice: null,
             guestChoice: null,
-            
             hostplayAgain: false,
             guestPlayAgain: false,
+
             hostScore: 0,
             guestScore: 0,
-
-            verdict: false,
             messageForHost: null,
             messageForGuest: null,
+
+            verdict: false,
             playDecision: false,
+            guestOffline: true,
         };
-        this.gameCode = this.props.match.params.gameCode;
+
+        this.gameCode = this.props.match.params.gameCode; // this.gameCode should be set, before calling getGameDetails()
         this.getGameDetails();
         this.handleLeaveGameButtonPressed = this.handleLeaveGameButtonPressed.bind(this);
         this.handlePlayAgainButtonPressed = this.handlePlayAgainButtonPressed.bind(this);
@@ -39,6 +41,7 @@ export default class Game extends Component {
         clearInterval(this.intervalId);
     } 
 
+    // 
     getGameDetails() {
         fetch("/api/get-game" + "?code=" + this.gameCode)
         .then((response) => {
@@ -52,7 +55,6 @@ export default class Game extends Component {
             this.setState({
                 isHost: data.is_host,             
             })            
-
         });
     }
 
@@ -71,7 +73,6 @@ export default class Game extends Component {
                 /* rps logic */
                 const host_dec = data.host_choice;
                 const guest_dec = data.guest_choice;
-
                 const message_loss = "Sorry, you lost!"
                 const message_win  = "Yeahhh! You won!"
                 const message_draw = "Oh, It's a draw!"
@@ -108,10 +109,31 @@ export default class Game extends Component {
             }
 
             console.log(data.host_choice, data.guest_choice, data.host_score, data.guest_score)
-            this.setState({
-                hostChoice: data.host_choice,
-                guestChoice: data.guest_choice,
-            });
+            if (data.guest == null){
+                this.setState({
+                    hostChoice: null,
+                    guestChoice: null,
+                    
+                    hostplayAgain: false,
+                    guestPlayAgain: false,
+                    hostScore: 0,
+                    guestScore: 0,
+        
+                    verdict: false,
+                    messageForHost: null,
+                    messageForGuest: null,
+                    playDecision: false,
+                    guestOffline: true,
+                });
+            } else {
+                this.setState({
+                    hostChoice: data.host_choice,
+                    guestChoice: data.guest_choice,
+                    hostScore: data.host_score,
+                    guestScore: data.guest_score,
+                    guestOffline: false,
+                });                
+            }
 
             if (data.host_play_again == true || data.guest_play_again == true){
                 if (data.host_play_again == true && data.guest_play_again == false){
@@ -132,7 +154,7 @@ export default class Game extends Component {
                 }
             }
         });
-      }        
+    }        
 
     handleLeaveGameButtonPressed() {
         const requestOptions = {
@@ -173,13 +195,13 @@ export default class Game extends Component {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(json_data),
         };
-        fetch("/api/replay-game", requestOptions)
+        fetch("/api/restart-game", requestOptions)
         .then((response) => {
             if (response.ok) {
-            console.log("replay update done.");
+            console.log("restart update done.");
             return response.json();
             } else {
-            console.log("replay update not done.");
+            console.log("restart update not done.");
             }
         })
         .then((data) => {
@@ -194,8 +216,53 @@ export default class Game extends Component {
         });
     }
 
+    handleContinueGamePressed(){
+        let json_data;
+        if (this.state.isHost == true){
+            json_data = {
+                host_choice: null,
+                guest_choice: this.state.guestChoice,
+                host_play_again: false,
+                guest_play_again: false,
+            };   
+        } else {
+            json_data = {
+                host_choice: this.state.hostChoice,
+                guest_choice: null,
+                host_play_again: false,
+                guest_play_again: false,  
+            };   
+        }
 
-
+        console.log(json_data)
+        const requestOptions = {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(json_data),
+        };
+        fetch("/api/restart-game", requestOptions)
+        .then((response) => {
+            if (response.ok) {
+            console.log("restart update done.");
+            return response.json();
+            } else {
+            console.log("restart update not done.");
+            }
+        })
+        .then((data) => {
+            console.log(data);
+            this.setState({
+                hostChoice: json_data.host_choice,
+                guestChoice: json_data.guest_choice,
+                verdict: false,
+                messageForHost: null,
+                messageForGuest: null,
+                playDecision: false,
+                hostplayAgain: false,
+                guestPlayAgain: false,
+            });
+        });
+    }    
 
     handleUserChoice(value) {
         console.log("handleUserChoice Pressed with value: " + value)
@@ -209,7 +276,7 @@ export default class Game extends Component {
                 guestChoice: value,
             }, () => {this.fetchData({guest_choice: this.state.guestChoice, host_score: this.state.hostScore, guest_score: this.state.guestScore});});            
         }
-    }
+    }    
 
     fetchData(json_data) {
         const requestOptions = {
@@ -297,53 +364,6 @@ export default class Game extends Component {
         );
     }    
 
-    handleContinueGamePressed(){
-        let json_data;
-        if (this.state.isHost == true){
-            json_data = {
-                host_choice: null,
-                guest_choice: this.state.guestChoice,
-                host_play_again: false,
-                guest_play_again: false,
-            };   
-        } else {
-            json_data = {
-                host_choice: this.state.hostChoice,
-                guest_choice: null,
-                host_play_again: false,
-                guest_play_again: false,  
-            };   
-        }
-
-        console.log(json_data)
-        const requestOptions = {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(json_data),
-        };
-        fetch("/api/replay-game", requestOptions)
-        .then((response) => {
-            if (response.ok) {
-            console.log("replay update done.");
-            return response.json();
-            } else {
-            console.log("replay update not done.");
-            }
-        })
-        .then((data) => {
-            console.log(data);
-            this.setState({
-                hostChoice: json_data.host_choice,
-                guestChoice: json_data.guest_choice,
-                verdict: false,
-                messageForHost: null,
-                messageForGuest: null,
-                playDecision: false,
-                hostplayAgain: false,
-                guestPlayAgain: false,
-            });
-        });
-    }
 
     render() {
         if (this.state.playDecision == true){
@@ -360,10 +380,13 @@ export default class Game extends Component {
         return (
             <div className={styles.gameWrapper}>
                 <h3>Game code: {this.gameCode}</h3>
-                {/* <h4>HC: {this.state.hostChoice}</h4>
+                <h6>Host: <span className={styles.online}>online</span> Guest: {this.state.guestOffline == true ? <span className={styles.offline}>offline</span> : <span className={styles.online}>online</span>}</h6>
+                {/* 
+                <h4>HC: {this.state.hostChoice}</h4>
                 <h4>GC: {this.state.guestChoice}</h4>
                 <p>Host: {this.state.isHost.toString()}</p>
-                <br/> */}
+                <br/> 
+                */}
 
                 <div className={styles.mainHeadBlock}>
                     <div className={styles.scoreBlock}>
@@ -391,11 +414,8 @@ export default class Game extends Component {
                     {   ((this.state.hostChoice == null && this.state.guestChoice != null) && (this.state.verdict == false)) ? (this.state.isHost == false ? <div className={styles.verdictText}>Waiting for host's choice ...</div> : <div className={styles.verdictText}>Guest has already chosen! Waiting for your choice ...</div>) : null }
                     {   ((this.state.hostChoice != null && this.state.guestChoice == null) && (this.state.verdict == false)) ? (this.state.isHost == true ? <div className={styles.verdictText}>Waiting for guest's choice ...</div> : <div className={styles.verdictText}>Host has already chosen! Waiting for your choice ...</div>) : null }
                 </div>                     
-
-
-
-                {   this.state.isHost == true ? (this.state.hostChoice == null ?  this.renderChoices() : this.renderChoicesDisabled()) : null }
-                {   this.state.isHost == false ? (this.state.guestChoice == null ? this.renderChoices() : this.renderChoicesDisabled()) : null }              
+                    {   this.state.isHost == true ? (this.state.hostChoice == null ?  this.renderChoices() : this.renderChoicesDisabled()) : null }
+                    {   this.state.isHost == false ? (this.state.guestChoice == null ? this.renderChoices() : this.renderChoicesDisabled()) : null }              
 
                 <div className={`${styles.button} ${styles.playAgainButton}`} onClick={this.handlePlayAgainButtonPressed}>PLAY AGAIN</div>
                 <div className={`${styles.button} ${styles.leaveButton}`} onClick={this.handleLeaveGameButtonPressed}>LEAVE GAME</div>
@@ -403,3 +423,4 @@ export default class Game extends Component {
         );
     }
 }
+

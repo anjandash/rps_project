@@ -566,4 +566,10 @@
   transform: scale(1.1);
 }
 
+.offline{
+  color: red;
+}
 
+.online{
+  color: green;
+}

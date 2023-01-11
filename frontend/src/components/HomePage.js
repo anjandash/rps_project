@@ -16,6 +16,7 @@ export default class HomePage extends Component {
         this.clearGameCode = this.clearGameCode.bind(this);
     }
 
+    // asynchronously retrieve the gameCode as the page is loading
     async componentDidMount() {
         fetch("/api/user-in-game")
           .then((response) => response.json())
@@ -25,7 +26,14 @@ export default class HomePage extends Component {
             });
             console.log("Found game code: " + this.state.gameCode)
           });
-      }
+    }
+
+    // clear gameCode on callback when Game is abandoned
+    clearGameCode() {
+        this.setState({
+            gameCode: null,
+        });
+    }    
 
     renderHomePage() {
         return (
@@ -39,12 +47,6 @@ export default class HomePage extends Component {
                 </div>
             </div>
         );
-    }
-
-    clearGameCode() {
-        this.setState({
-            gameCode: null,
-        });
     }
 
     render() {
