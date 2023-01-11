@@ -147,7 +147,7 @@ class PlayGame(APIView):
 
             queryset = Game.objects.filter(code=code)
             if not queryset.exists(): 
-                return Response({'Bad Request': 'Invalid Game Code'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'Bad Request': 'Invalid Game Code'}, status=status.HTTP_404_NOT_FOUND)
             else:
                 game = queryset[0]
                 if serializer.data.get('host_choice') is not None:

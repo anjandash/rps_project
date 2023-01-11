@@ -53,14 +53,14 @@ And voilà, your app should be running on your local machine, at this address: `
 The Rock Paper Scissors API allows users to play the classic game of Rock Paper Scissors against another online opponent (with the shared game code).
 
 ### API Routes
-- `GET`  &nbsp; `/api/game`: Retrieve a list of all available games.
-- `GET`  &nbsp; `/api/get-game/`: Retrieve the details of a specific game.
+- `GET` `/api/game`: Retrieve a list of all available games.
+- `GET` `/api/get-game/`: Retrieve the details of a specific game.
 - `POST` `/api/create-game`: Create a new game.
 - `POST` `/api/join-game`: Join an existing game.
-- `GET`  &nbsp; `/api/user-in-game`: Retrieve the game details of the current game.
+- `GET`  `/api/user-in-game`: Retrieve the game details of the current game.
 - `POST` `/api/leave-game`: Leave the game that the user is currently in.
-- `POST` `/api/play-game`: Submit a play choice (rock, paper, or scissors) for the current game.
-- `POST` `/api/restart-game`: Replay another round in the current game.
+- `PATCH` `/api/play-game`: Submit a play choice (rock, paper, or scissors) for the current game.
+- `PATCH` `/api/restart-game`: Replay another round in the current game.
 
 <hr style="height: 1px;"> 
 
@@ -101,11 +101,11 @@ Game result will be based on the following rule:
  - ***Scissors*** beats ***Paper***
  - ***Paper*** beats ***Rock***
  - In case both player play same choice it will be considered as a draw
+
+
 <br/>
 ***
 ***
-
-
 
 
 ## Frontend Docs
