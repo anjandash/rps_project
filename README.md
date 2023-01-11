@@ -1,14 +1,16 @@
 # Rock Paper Scissors: The Game
 ### Dual-player Online Game 
 
-Welcome to the Rock Paper Scissors game developed with Django and React! <br/>This game allows you to play the classic game of Rock Paper Scissors against other user(s).
+Welcome to the Rock Paper Scissors game developed with Django and React! <br/>This game allows you to play the classic game of Rock Paper Scissors against other user(s) in real-time.
 The backend of the game is built using the Django framework, providing a robust API for managing games. The frontend is built using React, providing a nice and user-friendly interface for playing the game.
+
+It's a simple two-player game, where users can play rock-paper-scissors online in real-time!
 
 ***To start playing, simply create a new game or join an existing one.***<br/> 
 If you have created a new game, you can share the generated game code with another friend to start the game, if you already have a code shared by your friend, proceed to join the game.
 
-You will then be able to see the current state of the game and submit your play. <br/>
-Once both players have submitted their plays, the verdict will be determined and displayed on the screen, and the scoreBoard will update accordingly. The game also provides the ability to replay another round of the game or leave the game, so you can play as many times as you like.
+You will then be able to see the current state of the game and submit your play choice. <br/>
+Once both players have submitted their choices, the verdict will be determined and displayed on the screen, and the scoreBoard will update accordingly. The game also provides the possibility to play further rounds of the game or leave the game, so you can play just as many times as you like.
 
 We hope you enjoy playing Rock Paper Scissors! <br/>
 If you have any questions or feedback, please don't hesitate to email me at: anjan8@gmail.com.
