@@ -375,7 +375,7 @@ export default class Game extends Component {
         );
     }    
 
-    // render function for guest result 
+    // render function for host result 
     renderHostResultVerdict(){
         return(
             <div className={styles.verdictText}>{this.state.messageForHost}</div>

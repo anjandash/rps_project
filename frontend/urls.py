@@ -6,5 +6,6 @@ urlpatterns = [
     path('join', index),
     path('create', index),
     path('game/<str:gameCode>', index),
+    path('comp/<str:gameCode>', index),
 
 ]

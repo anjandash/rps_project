@@ -8,7 +8,7 @@ export default class CreateGamePage extends Component {
         this.handleCreateGameButtonPressed = this.handleCreateGameButtonPressed.bind(this);
     }
 
-    handleCreateGameButtonPressed(){
+    handleCreateGameButtonPressed(game_url){
         console.log("Create game button pressed!")
         const requestOptions = {
             method: 'POST',
@@ -19,7 +19,7 @@ export default class CreateGamePage extends Component {
         };
         fetch('/api/create-game', requestOptions)
             .then((response) => response.json())
-            .then((data) => this.props.history.push("/game/" + data.code));
+            .then((data) => this.props.history.push("/" + game_url+ "/" + data.code));
     }
 
     render() {
@@ -28,10 +28,12 @@ export default class CreateGamePage extends Component {
                 <div className={styles.genericCard}>
                     <div className={styles.logoTextHome}>ROCK. PAPER. SCISSORS.</div>
                     <div className={styles.logoSubtitle}>By @anjandash / liqi</div>                    
-                    <div className={`${styles.button} ${styles.createButton}`} onClick={this.handleCreateGameButtonPressed}>
+                    <div className={`${styles.button} ${styles.createButton}`} onClick={this.handleCreateGameButtonPressed.bind(this, "game")}>
                         PLAY WITH A FRIEND
                     </div>
-                    <Link to="/" className={`${styles.button} ${styles.backButton} ${styles.buttonDisabled}`}>PLAY WITH COMPUTER</Link>
+                    <div className={`${styles.button} ${styles.createButton}`} onClick={this.handleCreateGameButtonPressed.bind(this, "comp")}>
+                        PLAY WITH COMPUTER
+                    </div>
                     <div>
                         <Link to="/" className={`${styles.button} ${styles.backButton}`}>BACK</Link>
                     </div>    

@@ -4,7 +4,9 @@ import { BrowserRouter, Switch,  Route, Link, Redirect } from "react-router-dom"
 import JoinGamePage from "./JoinGamePage";
 import CreateGamePage from "./CreateGamePage";
 import Game from "./Game"
+import ComputerGame from "./ComputerGame";
 import styles from "./css/HomePage.module.css"
+
 
 
 export default class HomePage extends Component {
@@ -66,6 +68,11 @@ export default class HomePage extends Component {
                             return <Game {...props} leaveGameCallback={this.clearGameCode} />;
                         }}
                     />
+                    <Route path="/comp/:gameCode" 
+                        render={(props) => {
+                            return <ComputerGame {...props} leaveGameCallback={this.clearGameCode} />;
+                        }}
+                    />                    
                 </Switch>
             </BrowserRouter>
         );
