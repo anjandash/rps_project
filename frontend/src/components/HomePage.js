@@ -65,7 +65,8 @@ export default class HomePage extends Component {
                     <Route exact path="/create" component={CreateGamePage} />
                     <Route path="/game/:gameCode" 
                         render={(props) => {
-                            return this.state.gameCode ? <Game {...props} leaveGameCallback={this.clearGameCode} /> : (<Redirect to={`/join`} />);
+                            // return this.state.gameCode ? <Game {...props} leaveGameCallback={this.clearGameCode} /> : (<Redirect to={`/join`} />);
+                            return <Game {...props} leaveGameCallback={this.clearGameCode} />;
                         }}
                     />
                     <Route path="/comp/:gameCode" 
