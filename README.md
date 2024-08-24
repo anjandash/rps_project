@@ -109,8 +109,7 @@ Game result will be based on the following rule:
 
 
 <br/>
-***
-***
+******
 
 
 ## Frontend Docs
